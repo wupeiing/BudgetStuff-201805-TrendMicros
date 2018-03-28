@@ -30,7 +30,7 @@ namespace BudgetStuffTests
                 return 0;
             }
 
-            var monthes = (endTime.Year * 12 + endTime.Month) - (startTime.Year * 12 + startTime.Month);
+            var monthes = (endTime.Year * 12 + endTime.Month) - (startTime.Year * 12 + startTime.Month) + 1;
 
             //budget to Dict
             Dictionary<String,Budget> budgetDict = new Dictionary<string, Budget>();
@@ -41,10 +41,10 @@ namespace BudgetStuffTests
             var rtn = 0;
             if (monthes == 1)
             {
-                var validDays = DateTime.DaysInMonth(startTime.Year, startTime.Month) - startTime.Day + 1;
+                //return startTime.Day;
+                var validDays = endTime.Day - startTime.Day + 1;
                 var ym = startTime.ToString("yyyyMM");
                 if (budgetDict.ContainsKey(ym))
-
                 {
                     var budget = budgetDict[ym];
                     rtn += budget.getDailyAmount() * validDays;
