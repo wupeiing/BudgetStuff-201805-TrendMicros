@@ -24,7 +24,7 @@ namespace BudgetStuffTests
         {
             GivenBudget(new List<Budget>());
             var actualResult = _budgetReturn.BudgetResult(new DateTime(2017, 1, 1), new DateTime(2018, 1, 1));
-            Assert.AreEqual(0, actualResult);
+            BudgetShouldBe(0, actualResult);
         }
 
         [TestMethod]
@@ -32,19 +32,39 @@ namespace BudgetStuffTests
         {
             GivenBudget(new List<Budget> { new Budget{Amount = 3000, YearMonth = "201704"}});
             var actualResult = _budgetReturn.BudgetResult(new DateTime(2017,4,1), new DateTime(2017,4,30));
-            Assert.AreEqual(3000, actualResult);
+            BudgetShouldBe(3000, actualResult);
         }
 
 
         [TestMethod]
         public void PartofOneMonth()
         {
-            decimal expected = 700;
             GivenBudget(new List<Budget> { new Budget { Amount = 3000, YearMonth = "201704" } });
             var actualResult = _budgetReturn.BudgetResult(new DateTime(2017, 4, 1), new DateTime(2017, 4, 7));
+            BudgetShouldBe(700, actualResult);
+        }
+
+        [TestMethod]
+        public void QueryCrossMonth()
+        {
+            GivenBudget(new List<Budget> { new Budget { Amount = 3000, YearMonth = "201704" } });
+            var actualResult = _budgetReturn.BudgetResult(new DateTime(2017, 4, 1), new DateTime(2017, 5, 5));
+            BudgetShouldBe(3000, actualResult);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidException))]
+        public void InvalidDuration()
+        {
+            var actualResult = _budgetReturn.BudgetResult(new DateTime(2017, 4, 1), new DateTime(2017, 3, 7));
+        }
+
+        private static void BudgetShouldBe(decimal expected, decimal actualResult)
+        {
             Assert.AreEqual(expected, actualResult);
         }
 
+        
 
         private void GivenBudget(List<Budget> budgets)
         {
