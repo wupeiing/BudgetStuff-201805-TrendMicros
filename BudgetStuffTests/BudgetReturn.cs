@@ -53,13 +53,13 @@ namespace BudgetStuffTests
                 return rtn;
             }
 
-            for (int i = 0; i <= monthes; ++i)
+            for (int i = 0; i < monthes; ++i)
             {
                 var validDays = 0;
-                if (i == monthes )
+                if (i == monthes-1 )
                 {
-                    validDays = DateTime.DaysInMonth(endTime.Year, endTime.Month) - startTime.Day + 1;
-
+                    //validDays = DateTime.DaysInMonth(endTime.Year, endTime.Month) - startTime.Day + 1;
+                    validDays = endTime.Day - startTime.Day +1;
                 }
                 else
                 {
@@ -75,11 +75,7 @@ namespace BudgetStuffTests
                     var budget = budgetDict[ym];
                     rtn += budget.getDailyAmount() * validDays;
                 }
-
-                if (i != monthes)
-                {
-                    startTime = startTime.AddDays(validDays);
-                }
+                startTime = startTime.AddDays(validDays);
 
             }
 
